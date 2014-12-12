@@ -37,27 +37,27 @@ class MyApp:
 		self.myContainer1 = Frame(parent)
 		self.myContainer1.pack()
 		
-		self.button1 = Button(self.myContainer1)
-		self.button1.configure(text="Up", background= "green")
-		self.button1.grid(row=0,column=0)
+		self.up = Button(self.myContainer1)
+		self.up.configure(text="Up", background= "green")
+		self.up.grid(row=0,column=0)
 		
-		self.button2 = Button(self.myContainer1)
-		self.button2.configure(text="Down", background= "green")
-		self.button2.grid(row=0,column=1)
+		self.down = Button(self.myContainer1)
+		self.down.configure(text="Down", background= "green")
+		self.down.grid(row=0,column=1)
 		
-		self.button3 = Button(self.myContainer1)
-		self.button3.configure(text="Left", background= "green")
-		self.button3.grid(row=0,column=2)
+		self.left = Button(self.myContainer1)
+		self.left.configure(text="Left", background= "green")
+		self.left.grid(row=0,column=2)
 		
-		self.button4 = Button(self.myContainer1)
-		self.button4.configure(text="Right", background= "green")
-		self.button4.grid(row=0,column=3)
+		self.right = Button(self.myContainer1)
+		self.right.configure(text="Right", background= "green")
+		self.right.grid(row=0,column=3)
 					
 		# "Bind" an action to the first button												
-		self.button1.bind("<Button-1>", self.button1Click)
-		self.button2.bind("<Button-1>", self.button1Click)
-		self.button3.bind("<Button-1>", self.button1Click)
-		self.button4.bind("<Button-1>", self.button1Click)
+		self.up.bind("<Button-1>", self.upClicked)
+		self.left.bind("<Button-1>", self.leftClicked)
+		self.right.bind("<Button-1>", self.rightClicked)
+		self.down.bind("<Button-1>", self.downClicked)
 
 		  
 		# This creates the drawpad - no need to change this 
@@ -70,31 +70,50 @@ class MyApp:
                 x1,y1,x2,y2 = drawpad.coords(player)
 		global targetx1, targety1, targetx2, targety2
 		
+		
         def upClicked(self, event):   
 	   global oval
 	   global player
-	   drawpad.move(player,0,20)
+	   drawpad.move(player,0,-20)
+	   self.collisionDetection()
 	   
 	def leftClicked(self, event):   
 	   global oval
 	   global player
 	   drawpad.move(player,-20,0)
+	   self.collisionDetection()
+
 	   
 	def rightClicked(self, event):   
 	   global oval
 	   global player
-	   drawpad.move(player,-20,0)
+	   drawpad.move(player,20,0)
+	   self.collisionDetection()
+
 	   
 	def downClicked(self, event):   
 	   global oval
 	   global player
-	   drawpad.move(player,0,-20)
+	   drawpad.move(player,0,20)
+	   self.collisionDetection()
+
 
 
 		# Ensure that we are doing our collision detection
 		# After we move our object!
+	def collisionDetection(self):
+	    global target
+	    global drawpad
+	    global player
+	    x1,y1,x2,y2 = drawpad.coords(player)
+	    tx1,ty1,tx2,ty2 = drawpad.coords(target)
+	    if x1 >= tx1 and x2 <= tx2 and y1 >= ty1 and y2 <= ty2:
+	        drawpad.itemconfig(target, fill = 'red')
+	        return True
+	    else:
+	        return False
 	
-	
+
 		
 myapp = MyApp(root)
 
